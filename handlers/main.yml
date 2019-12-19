@@ -1,0 +1,8 @@
+---
+# SSH Service Handler
+- name: Reload SSH
+  service: name=sshd state=reloaded
+
+# CSF Service Handler
+- name: Restart CSF
+  service: name=csf state=restarted 

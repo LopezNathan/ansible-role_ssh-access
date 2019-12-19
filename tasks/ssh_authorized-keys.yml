@@ -1,0 +1,9 @@
+---
+- name: Add SSH Key(s) to Authorized Keys
+  authorized_key:
+    user: "{{ authorized_key_user }}"
+    state: "{{ authorized_key_state }}"
+    key: "{{ item }}"
+  with_file:
+    - "{{ authorized_key_file }}"
+  notify: Reload SSH

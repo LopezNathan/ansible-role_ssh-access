@@ -1,0 +1,9 @@
+---
+- name: Add IP(s) to CSF Allow
+  lineinfile:
+    path: /etc/csf/csf.allow
+    regexp: "{{ item.ip_raw }}"
+    line: "{{ item.ip_line }}"
+  with_items:
+    - "{{ ip_list }}"
+  notify: Restart CSF

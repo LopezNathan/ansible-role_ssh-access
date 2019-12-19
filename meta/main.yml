@@ -1,0 +1,16 @@
+galaxy_info:
+  author: Nathan Lopez
+  description: Manage Authorized SSH Key(s) & Whitelist IP(s) in CSF Allow
+  company: BigScoots
+  license: MIT
+  min_ansible_version: 2.9
+  platforms:
+    - name: EL
+      versions:
+        - all
+  galaxy_tags:
+  - ssh
+  - csf
+  - firewall
+  - system
+  dependencies: []

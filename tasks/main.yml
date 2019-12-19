@@ -1,0 +1,3 @@
+---
+- include_tasks: ssh_authorized-keys.yml
+- include_tasks: csf_whitelist-ips.yml
