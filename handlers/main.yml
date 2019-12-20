@@ -5,4 +5,4 @@
 
 # CSF Service Handler
 - name: Restart CSF
-  service: name=csf state=restarted 
+  command: csf -r
