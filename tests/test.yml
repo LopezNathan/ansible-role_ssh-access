@@ -1,5 +1,52 @@
 ---
 - hosts: localhost
-  remote_user: root
+  connection: local
+  vars:
+    ansible_python_interpreter: /usr/bin/env python
+
+  tasks:
+
+    - name: Install Docker
+      pip:
+        name: docker
+        extra_args: "--upgrade"
+
+    - name: Create Test Docker Container
+      docker_container:
+        name:    ansible-role_ssh-access_test
+        image:   centos:latest
+        command: /sbin/init
+        state:    started
+        privileged: true
+
+    - name: Add Container to Inventory
+      add_host:
+        name: ansible-role_ssh-access_test
+        groups: docker_containers
+        ansible_connection: docker
+
+    - name: Install Required Packages for Testing
+      delegate_to: ansible-role_ssh-access_test
+      raw: yum install perl iptables openssh-server -y && curl -s -o csf.tgz https://download.configserver.com/csf.tgz && tar -xzf csf.tgz && cd csf && bash install.sh
+
+- name: Run Role in Container
+  hosts: docker_containers
+  vars:
+    authorized_key_file: ./test-key.txt
+    authorized_key_user: root
+    ip_list:
+      - name: Bob's Office IP
+        ip_raw: '123.123.123.123'
+        ip_line: '123.123.123.123 # Bobs Office'
   roles:
-    - ssh-access
+    - { role: ../.. }
+
+- hosts: localhost
+  connection: local
+  vars:
+    ansible_python_interpreter: /usr/bin/env python
+  tasks:
+    - name: Remove Test Docker Container
+      docker_container:
+        name: ansible-role_ssh-access_test
+        state: absent
