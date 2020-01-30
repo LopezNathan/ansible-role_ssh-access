@@ -1,4 +1,9 @@
 ---
+- name: Check if CSF Present
+  stat:
+    path: /etc/csf/version.txt
+  register: csf_check
+
 - name: Add IP(s) to CSF Allow
   lineinfile:
     path: /etc/csf/csf.allow
@@ -6,4 +11,5 @@
     line: "{{ item.ip_line }}"
   with_items:
     - "{{ ip_list }}"
+  when: csf_check.stat.exists
   notify: Restart CSF
