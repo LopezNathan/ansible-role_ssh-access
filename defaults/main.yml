@@ -4,8 +4,7 @@ authorized_key_file: ~/.ssh/id_rsa.pub
 authorized_key_user: root
 authorized_key_state: present
 
-# CSF Whitelist Variables
-ip_list:
-  - name:
-    ip_raw:
-    ip_line:
+# Local IP Whitelist File
+ip_whitelist_file: csf.allow.custom
+# CSF IP Whitelist Include File
+csf_whitelist_file: /etc/csf/csf.allow.custom

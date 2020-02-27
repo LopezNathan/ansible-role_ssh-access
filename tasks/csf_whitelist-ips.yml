@@ -4,12 +4,21 @@
     path: /etc/csf/version.txt
   register: csf_check
 
-- name: Add IP(s) to CSF Allow
+- name: Ensure IP Whitelist File Exists
+  copy:
+    src: '{{ ip_whitelist_file }}'
+    dest: '{{ csf_whitelist_file }}'
+    owner: root
+    group: root
+    mode: '0600'
+  when: csf_check.stat.exists
+
+- name: Ensure IP Whitelist File Include in /etc/csf/csf.allow
   lineinfile:
     path: /etc/csf/csf.allow
-    regexp: "{{ item.ip_raw }}"
-    line: "{{ item.ip_line }}"
-  with_items:
-    - "{{ ip_list }}"
+    regexp: '^Include {{ csf_whitelist_file }}'
+    line: 'Include {{ csf_whitelist_file }}'
+    insertafter: '^# add it to csf.ignore'
+    state: present
   when: csf_check.stat.exists
   notify: Restart CSF
