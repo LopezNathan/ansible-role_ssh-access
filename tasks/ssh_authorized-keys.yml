@@ -6,4 +6,3 @@
     key: "{{ item }}"
   with_file:
     - "{{ authorized_key_file }}"
-  notify: Reload SSH
